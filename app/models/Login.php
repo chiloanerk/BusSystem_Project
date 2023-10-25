@@ -1,6 +1,6 @@
 <?php
 
-namespace app\classes;
+namespace app\models;
 
 class Login
 {
@@ -11,8 +11,35 @@ class Login
         $this->pdo = $db->getPdo();
     }
 
-    public function authenticateParent($email, $password)
+    // Makes more sense to use one method and just change the table, so yeah...
+    public function authenticateUser(string $email, string $password, string $table) :bool
     {
+        $sql = "SELECT * FROM $table WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
 
+        $user = $stmt->fetch();
+        if ($user) {
+            $storedPassword = $user['password'];
+            if ($password === $storedPassword) {
+                session_start();
+                $_SESSION['id'] = $user['id'];
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Authenticate the parent form
+    public function authenticateParent(string $email, string $password): bool
+    {
+        return $this->authenticateUser($email, $password, 'parent');
+    }
+
+    // Authenticate the admin form
+    public function authenticateAdmin(string $email, string $password): bool
+    {
+        return $this->authenticateUser($email, $password, 'admin');
     }
 }

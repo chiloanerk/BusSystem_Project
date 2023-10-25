@@ -5,15 +5,15 @@ namespace app\controllers\login;
 class LoginController
 {
     public string $title = 'SafeTrans - Login';
+    public string $heading = 'Login';
     public function parentLogin()
     {
-        $heading = 'Parent Login';
         $action = 'login';
         $role = 'Parent';
 
         view('login/login', [
             'title' => $this->title,
-            'heading' => $heading,
+            'heading' => $this->heading,
             'action' => $action,
             'role' => $role
         ]);

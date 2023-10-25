@@ -10,5 +10,6 @@ $router->addRoute('GET', '/signup', 'login/signup');
 $router->addRoute('POST', '/signup', 'login/signup');
 
 $router->addRoute('GET', '/application', 'application/application');
+$router->addRoute('POST', '/checkout', 'application/checkout');
 $router->addRoute('GET', '/panel', 'panel/panel');
 

@@ -8,7 +8,7 @@
             <p class="text-red-800"><?= $_SESSION['error'] ?></p>
             <?php unset($_SESSION['error']) ?>
         <?php endif ?>
-        <form method="post" action="/application"
+        <form method="post" action="/checkout"
               class="w-full max-w-3xl mx-auto p-6 bg-white rounded-md shadow-lg">
 
             <div class="grid grid-cols-2 gap-4">
@@ -36,17 +36,13 @@
 
                 <div class="flex flex-col justify-center">
                     <div class="mb-4">
-                        <div class="flex space-x-2 justify-evenly">
-                            <label for="bus-radio-1">
-                                <input type="radio" name="role" id="bus-radio-1" value="1" class="mx-2" required>Bus 1
-                            </label>
-                            <label for="bus-radio-2">
-                                <input type="radio" name="role" id="bus-radio-2" value="2" class="mx-2" required>Bus 2
-                            </label>
-                            <label for="bus-radio-3">
-                                <input type="radio" name="role" id="bus-radio-3" value="3" class="mx-2" required>Bus 3
-                            </label>
-                        </div>
+                        <label for="pickup-point">Bus Route</label>
+                        <select name="bus" id="pickup-point" class="border rounded px-4 py-2 w-full" required>
+                            <option value="">Select a Bus</option>
+                            <option value="1">Bus 1</option>
+                            <option value="2">Bus 2</option>
+                            <option value="3">Bus 3</option>
+                        </select>
                     </div>
 
                     <div class="mb-4">

@@ -9,7 +9,7 @@ class Database
     private $host = 'localhost';
     private $username = 'webmaster';
     private $password = 'password';
-    private $database = 'test';
+    private $database = 'SafeTrans';
     private $pdo;
 
     public function __construct()

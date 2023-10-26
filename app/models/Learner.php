@@ -14,19 +14,25 @@ class Learner
     private int $parent_id;
     protected PDO $pdo;
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
     public function __construct(Database $db)
     {
         $this->pdo = $db->getPdo();
     }
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+
     public function setId($learner_id)
     {
         $this->id = $learner_id;
+    }
+
+    public function setParent_id($parent_id)
+    {
+        $this->parent_id = $parent_id;
     }
 
     public function getName(): string

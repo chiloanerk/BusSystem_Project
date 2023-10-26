@@ -8,63 +8,64 @@
             <p class="text-red-800"><?= $_SESSION['error'] ?></p>
             <?php unset($_SESSION['error']) ?>
         <?php endif ?>
-        <form method="post" action="/checkout"
+        <form method="post" action="/review"
               class="w-full max-w-3xl mx-auto p-6 bg-white rounded-md shadow-lg">
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700">Child's Name:</label>
-                        <input type="text" name="name" id="name" required class="w-full p-2 border rounded-md">
+                        <input type="text" name="name" id="name" value="<?= $_SESSION['name'] ?? '' ?>" required class="w-full p-2 border rounded-md">
                     </div>
 
                     <div class="mb-4">
                         <label for="surname" class="block text-gray-700">Child's Surname:</label>
-                        <input type="text" name="surname" id="surname" required class="w-full p-2 border rounded-md">
+                        <input type="text" name="surname" id="surname" value="<?= $_SESSION['name'] ?? '' ?>" required class="w-full p-2 border rounded-md">
                     </div>
 
                     <div class="mb-4">
                         <label for="cellphone" class="block text-gray-700">Cellphone:</label>
-                        <input type="tel" name="cellphone" id="cellphone" required class="w-full p-2 border rounded-md">
+                        <input type="tel" name="cellphone" id="cellphone" value="<?= $_SESSION['cellphone'] ?? '' ?>" required class="w-full p-2 border rounded-md">
                     </div>
 
                     <div class="mb-4">
                         <label for="grade">Grade</label>
-                        <input type="number" id="grade" name="grade" required class="border rounded px-4 py-2 w-full">
+                        <input type="number" id="grade" name="grade" value="<?= $_SESSION['grade'] ?? '' ?>" required class="border rounded px-4 py-2 w-full">
                     </div>
                 </div>
 
                 <div class="flex flex-col justify-center">
                     <div class="mb-4">
-                        <label for="pickup-point">Bus Route</label>
-                        <select name="bus" id="pickup-point" class="border rounded px-4 py-2 w-full" required>
+                        <label for="pickup_num">Bus</label>
+                        <select name="bus" id="pickup_num" class="border rounded px-4 py-2 w-full" required onchange="showRoutes(this.value)">
                             <option value="">Select a Bus</option>
-                            <option value="1">Bus 1</option>
-                            <option value="2">Bus 2</option>
-                            <option value="3">Bus 3</option>
+                            <?php foreach ($buses as $bus) : ?>
+                            <option value="<?= $bus['id'] ?>">Bus <?= $bus['id'] . ' - ' . $bus['route'] ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="pickup-point">Pickup Point</label>
-                        <select name="pickup-point" id="pickup-point" class="border rounded px-4 py-2 w-full" required>
+                    <div class="mb-4" id="routeInfo">
+                        <label for="pickup_num">Pickup Point</label>
+                        <select name="pickup_num" id="pickup_num" class="border rounded px-4 mb-4 py-2 w-full" required>
                             <option value="">Select a Pickup Point</option>
-                            <option value="1">Corner 1</option>
-                            <option value="2">Corner 2</option>
-                            <option value="3">Corner 3</option>
                         </select>
-                    </div>
 
-                    <div class="mb-4">
-                        <label for="dropoff-point">Dropoff Point</label>
-                        <select name="dropoff-point" id="dropoff-point" class="border rounded px-4 py-2 w-full" required>
+                        <label for="dropoff_num">Dropoff Point</label>
+                        <select name="dropoff_num" id="dropoff_num" class="border rounded px-4 mb-8 py-2 w-full" required>
                             <option value="">Select a Dropoff Point</option>
-                            <option value="1">Corner 1</option>
-                            <option value="2">Corner 2</option>
-                            <option value="3">Corner 3</option>
                         </select>
+                        <div class=" flex justify-center">
+                            <table>
+                                <tr>
+                                    <th>Available Seats</th>
+                                </tr>
+                                <tr>
+                                    <td>Selct Bus</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-
                     <div class="text-center">
                         <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" value="Submit">
                     </div>
@@ -73,5 +74,6 @@
         </form>
     </div>
 </main>
+<script src="scripts/filterRoutes.js"></script>
 
 <?php include base_path('/app/views/partials/footer.php'); ?>

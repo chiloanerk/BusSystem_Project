@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use Exception;
 use PDO;
 
 class BusRegistration
@@ -22,6 +23,11 @@ class BusRegistration
     public function get_id(): int
     {
         return $this->id;
+    }
+
+    public function setParent_id($parent_id)
+    {
+        $this->parent_id = $parent_id;
     }
 
     public function getLearner_id(): int
@@ -74,7 +80,7 @@ class BusRegistration
         return $this->status;
     }
 
-    public function getCapacityPerBus($bus_id)
+    public function getRegistrationsPerBus($bus_id)
     {
         $sql = "SELECT COUNT(registration_id) FROM registrations WHERE bus_id = :bus_id";
         $stmt = $this->pdo->prepare($sql);
@@ -86,11 +92,10 @@ class BusRegistration
     public function availableSeats($busNumber) {
         $db = new Database();
         $bus = new Bus($db);
-        $registration = new BusRegistration($db);
 
         $capacity = $bus->getCapacity($busNumber);
-        $currentBusCapacity = $registration->getCapacityPerBus($busNumber);
-        return $capacity - $currentBusCapacity;
+        $currentBusCapacity = $this->getRegistrationsPerBus($busNumber);
+        return $capacity['capacity'] - $currentBusCapacity;
 
     }
 
@@ -105,22 +110,9 @@ class BusRegistration
         $stmt->bindParam(':pickup_num', $this->pickup_num);
         $stmt->bindParam(':dropoff_num', $this->dropoff_num);
         $stmt->bindParam(':status', $this->status);
-        $stmt->execute();
-
-        $this->id = $this->pdo->lastInsertId();
-    }
-
-    public function update()
-    {
-        $sql = "UPDATE registrations SET parent_id = :parent_id, learner_id = :learner_id, bus_id = :bus_id, pickup_num = :pickup_num, dropoff_num = :dropoff_num, status = :status WHERE learner_id = :learner_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':parent_id', $this->parent_id);
-        $stmt->bindParam(':learner_id', $this->learner_id);
-        $stmt->bindParam(':bus_id', $this->bus_id);
-        $stmt->bindParam(':pickup_num', $this->pickup_num);
-        $stmt->bindParam(':dropoff_num', $this->dropoff_num);
-        $stmt->bindParam(':status', $this->status);
-        $stmt->execute();
+        if ($stmt->execute()) {
+            return true;
+        }
     }
 
 
@@ -142,15 +134,5 @@ class BusRegistration
         return $stmt->fetchAll();
     }
 
-
-    public function getPickUpNameByNumber($pickupNum)
-    {
-        $sql = 'SELECT * FROM routes WHERE pickupNum = :pickupNum';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':pickupNum', $pickupNum);
-        $stmt->execute();
-        return $stmt->fetchAll();
-
-    }
 
 }

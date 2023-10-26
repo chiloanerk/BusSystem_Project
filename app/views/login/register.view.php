@@ -6,10 +6,9 @@
         <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 text-center">
             <?php if (isset($_SESSION['error'])) : ?>
                 <p class="text-red-800"><?= $_SESSION['error'] ?></p>
+                <?php unset($_SESSION['error']) ?>
             <?php endif ?>
-
-
-            <form method="post" action="/login"
+            <form method="post" action="/<?= $action; ?>"
                   class="w-full max-w-md mx-auto p-6 bg-white rounded-md shadow-lg">
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700">Email:</label>

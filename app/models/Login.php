@@ -24,7 +24,7 @@ class Login
             $storedPassword = $user['password'];
             if ($password === $storedPassword) {
                 session_start();
-                $_SESSION['id'] = $user['id'];
+                $_SESSION['parent_id'] = $user['id'];
                 return true;
             }
         }

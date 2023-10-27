@@ -7,6 +7,7 @@ use app\models\BusRegistration;
 use app\models\BusRoutes;
 use app\models\Database;
 use app\models\Learner;
+use app\models\Parents;
 use Exception;
 
 class ApplicationController
@@ -150,11 +151,45 @@ class ApplicationController
 
         public function checkout()
         {
+            session_start();
 
+            $db = new Database();
+            $learnerModel = new Learner($db);
+            $busModel = new Bus($db);
+            $routeModel = new BusRoutes($db);
+            $parentModel = new Parents($db);
+
+            $registrationModel = new BusRegistration($db);
+            $parent_id = $_SESSION['parent_id'];
+            $parentInfo = $parentModel->getParentInfo($parent_id);
+            $registrations = $registrationModel->getRegistrationByParentId($parent_id);
 
             view('application/checkout', [
                 'title' => 'SafeTrans - Checkout',
-                'heading' => 'Registration Details'
+                'heading' => 'Registration Complete',
+                'db' => $db,
+                'learnerModel' => $learnerModel,
+                'busModel' => $busModel,
+                'routeModel' => $routeModel,
+                'parentInfo' => $parentInfo,
+                'registrations' => $registrations
+            ]);
+        }
+
+        public function final()
+        {
+            session_start();
+
+            $db = new Database();
+            $parentModel = new Parents($db);
+
+            $parentInfo = $parentModel->getParentInfo($_SESSION['parent_id']);
+            $parent_email = $parentInfo['email'];
+
+            view('application/final', [
+                'title' => 'SafeTrans - Complete',
+                'heading' => 'Registration Complete',
+                'parent_email' => $parent_email
             ]);
         }
 

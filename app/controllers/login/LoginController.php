@@ -27,7 +27,7 @@ class LoginController
                         break;
                     case 'admin':
                         $_SESSION['role'] = $role;
-                        header('Location: /panel');
+                        header('Location: /dashboard');
                         break;
                     default:
                         // Invalid role.

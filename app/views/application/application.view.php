@@ -8,9 +8,11 @@
             <p class="text-red-800"><?= $_SESSION['error'] ?></p>
             <?php unset($_SESSION['error']) ?>
         <?php endif ?>
+        <div class="py-4 bg-white w-full max-w-3xl mx-auto mb-4 shadow text-blue-800">
+            <a href="/checkout">View My Active Registrations</a>
+        </div>
         <form method="post" action="/review"
               class="w-full max-w-3xl mx-auto p-6 bg-white rounded-md shadow-lg">
-
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <div class="mb-4">

@@ -134,5 +134,14 @@ class BusRegistration
         return $stmt->fetchAll();
     }
 
+    public function getRegistrationsByStatus($status)
+    {
+        $sql = "SELECT * FROM registrations WHERE status = :status";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':status', $status);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
 
 }

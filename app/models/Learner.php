@@ -102,4 +102,13 @@ class Learner
         $stmt->execute();
     }
 
+    public function getLearner($learner_id)
+    {
+        $sql = "SELECT * FROM learner WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':id', $learner_id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
 }

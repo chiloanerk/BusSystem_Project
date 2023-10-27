@@ -15,6 +15,7 @@ $router->addRoute('POST', '/review', 'application/review');
 $router->addRoute('GET', '/review', 'application/review');
 $router->addRoute('POST', '/complete', 'application/complete');
 $router->addRoute('GET', '/checkout', 'application/checkout');
+$router->addRoute('GET', '/final', 'application/final');
 
-$router->addRoute('GET', '/panel', 'panel/panel');
+$router->addRoute('GET', '/dashboard', 'admin/dashboard');
 

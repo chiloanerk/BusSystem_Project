@@ -143,5 +143,33 @@ class BusRegistration
         return $stmt->fetchAll();
     }
 
+    public function getWaitingListByBus($bus_num)
+    {
+        $sql = "SELECT * FROM registrations WHERE status = 'pending' AND bus_id = :bus_num";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':bus_num', $bus_num);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function approveRegistration($learner_id)
+    {
+        $sql = "UPDATE registrations SET status  = 'approved' WHERE learner_id = :learner_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':learner_id', $learner_id);
+        $stmt->execute();
+        return true;
+    }
+
+
+    public function getByBus($bus_num)
+    {
+        $sql = "SELECT * FROM registrations WHERE bus_id = :bus_num";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':bus_num', $bus_num);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
 
 }

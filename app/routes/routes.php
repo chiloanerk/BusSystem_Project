@@ -18,4 +18,5 @@ $router->addRoute('GET', '/checkout', 'application/checkout');
 $router->addRoute('GET', '/final', 'application/final');
 
 $router->addRoute('GET', '/dashboard', 'admin/dashboard');
+$router->addRoute('GET', '/approve', 'admin/approve');
 

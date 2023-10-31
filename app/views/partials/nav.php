@@ -5,7 +5,10 @@
                 <a href="/" class="bg-gray-900 text-white rounded-md px-3 py-2 mx-4 text-sm font-medium"
                    aria-current="page">Home</a>
             <?php endif; ?>
-
+            <?php if ($_SESSION['role'] == 'admin') : ?>
+            <a href="/dashboard"
+               class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 mx-4 text-sm font-medium">Dashboard</a>
+            <?php endif; ?>
             <a href="/application"
                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 mx-4 text-sm font-medium">Applications</a>
             <?php if (isset($_SESSION['role'])) : ?>

@@ -2,7 +2,6 @@
 
 namespace app\controllers\admin;
 
-use app\models\Bus;
 use app\models\BusRegistration;
 use app\models\Database;
 
@@ -10,16 +9,40 @@ class AdminController
 {
     public function dashboard()
     {
-        $db = new Database();
-        $registrations = new BusRegistration($db);
-        $waitingList = $registrations->getRegistrationsByStatus('pending');
-
-
+        $waitingList = $this->waitingList();
+        $approvedList = $this->approvedList();
         view('admin/dashboard', [
             'title' => 'SafeTrans - Dashboard',
             'heading' => 'Admin Dashboard',
-            'waitingList' => $waitingList
-
+            'waitingList' => $waitingList,
+            'approvedList' => $approvedList
         ]);
+    }
+
+    public function waitingList()
+    {
+        $db = new Database();
+        $registrations = new BusRegistration($db);
+        return $registrations->getRegistrationsByStatus('pending');
+    }
+
+    public function approvedList()
+    {
+        $db = new Database();
+        $registrations = new BusRegistration($db);
+        return $registrations->getRegistrationsByStatus('approved');
+    }
+
+    public function approveRegistration($learner_id)
+    {
+        $db = new Database();
+        $registrations = new BusRegistration($db);
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $learner_id = $_GET['learner_id'];
+            if ($registrations->approveRegistration($learner_id)) {
+                header('Location: dashboard');
+            }
+
+        }
     }
 }

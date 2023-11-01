@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+
 use Exception;
 use PDO;
 
@@ -89,7 +90,8 @@ class BusRegistration
         return $stmt->fetchColumn();
     }
 
-    public function availableSeats($busNumber) {
+    public function availableSeats($busNumber)
+    {
         $db = new Database();
         $bus = new Bus($db);
 
@@ -170,6 +172,47 @@ class BusRegistration
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    public function getThisWeek()
+    {
+        $sql = "SELECT * FROM registrations WHERE date >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK )";
+        $stmt = $this->pdo->query($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function getWeeklyMorningCount($bus_id)
+    {
+        $sql = "SELECT
+    bus_id,
+    SUM(CASE WHEN pickup_num != '' THEN 1 ELSE 0 END) AS morning_trip_count
+FROM registrations
+WHERE date >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)
+    AND bus_id = :bus_id
+GROUP BY bus_id;
+";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':bus_id', $bus_id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function getWeeklyAfternoonCount($bus_id)
+    {
+        $sql = "SELECT
+    bus_id,
+    SUM(CASE WHEN dropoff_num != '' THEN 1 ELSE 0 END) AS afternoon_trip_count
+FROM registrations
+WHERE date >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)
+  AND bus_id = :bus_id
+GROUP BY bus_id;
+";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':bus_id', $bus_id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
 
 
 }

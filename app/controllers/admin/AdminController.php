@@ -11,11 +11,12 @@ class AdminController
     {
         $waitingList = $this->waitingList();
         $approvedList = $this->approvedList();
+
         view('admin/dashboard', [
             'title' => 'SafeTrans - Dashboard',
             'heading' => 'Admin Dashboard',
             'waitingList' => $waitingList,
-            'approvedList' => $approvedList
+            'approvedList' => $approvedList,
         ]);
     }
 
@@ -44,5 +45,11 @@ class AdminController
             }
 
         }
+    }
+
+    public function getWeeklyReport()
+    {
+        $db = new Database();
+        $registrations = new BusRegistration($db);
     }
 }

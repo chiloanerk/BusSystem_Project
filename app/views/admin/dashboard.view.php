@@ -1,13 +1,22 @@
-<?php include base_path('/app/views/partials/head.php'); ?>
+<?php use app\controllers\admin\AdminController;
+use app\models\Bus;
+use app\models\BusRegistration;
+use app\models\BusRoutes;
+use app\models\Database;
+use app\models\Learner;
+use app\models\Parents;
+
+include base_path('/app/views/partials/head.php'); ?>
 <?php include base_path('/app/views/partials/nav.php'); ?>
 <?php include base_path('/app/views/partials/header.php'); ?>
 <?php
-$db = new \app\models\Database();
-$parent = new \app\models\Parents($db);
-$learner = new \app\models\Learner($db);
-$bus = new \app\models\Bus($db);
-$route = new \app\models\BusRoutes($db);
-$admin = new \app\controllers\admin\AdminController();
+$db = new Database();
+$parent = new Parents($db);
+$learner = new Learner($db);
+$bus = new Bus($db);
+$route = new BusRoutes($db);
+$admin = new AdminController();
+$registrations = new BusRegistration($db);
 ?>
 
 <main class="p-4 min-h-full pb-16">
@@ -17,9 +26,9 @@ $admin = new \app\controllers\admin\AdminController();
         <div
         ">
         <!-- Daily MIS Reports -->
-        <div class="border p-4 rounded-lg shadow">
+        <div class="border p-4 rounded-lg shadow mb-4">
             <h2 class="text-xl font-semibold">Daily MIS Reports</h2>
-            <div class="mt-4">
+            <div class="mt-4 border-b border-dashed pb-4">
                 <!-- Report 1: Learners on Waiting List -->
                 <h3 class="text-lg font-medium">Learners on Waiting List</h3>
 
@@ -66,6 +75,7 @@ $admin = new \app\controllers\admin\AdminController();
                     <?php endforeach; ?>
                 </table>
             </div>
+
             <div class="mt-4">
                 <!-- Report 2: Learners Using Bus Transport for Today -->
                 <h3 class="text-lg font-medium">Learners Using Bus Transport Today</h3>
@@ -118,16 +128,15 @@ $admin = new \app\controllers\admin\AdminController();
                     </tr>
                     </thead>
                     <tbody>
+
+                    <?php $buses = $bus->getBuses() ?>
+                    <?php foreach ($buses as $list) : ?>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2">Bus A</td>
-                        <td class="border border-gray-300 px-4 py-2">12</td>
-                        <td class="border border-gray-300 px-4 py-2">15</td>
+                        <td class="border border-gray-300 px-4 py-2"><?= 'Bus ' . $list['id'] ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $registrations->getWeeklyMorningCount($list['id'])['morning_trip_count'] ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $registrations->getWeeklyAfternoonCount($list['id'])['afternoon_trip_count'] ?></td>
                     </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Bus B</td>
-                        <td class="border border-gray-300 px-4 py-2">14</td>
-                        <td class="border border-gray-300 px-4 py-2">13</td>
-                    </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -143,27 +152,25 @@ $admin = new \app\controllers\admin\AdminController();
                     <thead>
                     <tr class="bg-gray-100">
                         <th class="border border-gray-300 px-4 py-2">Bus ID</th>
-                        <th class="border border-gray-300 px-4 py-2">Current Occupancy</th>
+                        <th class="border border-gray-300 px-4 py-2">Seats Taken</th>
+                        <th class="border border-gray-300 px-4 py-2">Seats Left</th>
                         <th class="border border-gray-300 px-4 py-2">Capacity</th>
                     </tr>
                     </thead>
                     <tbody>
+                    <?php foreach ($buses as $list) : ?>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2">Bus A</td>
-                        <td class="border border-gray-300 px-4 py-2">28</td>
-                        <td class="border border-gray-300 px-4 py-2">30</td>
+                        <td class="border border-gray-300 px-4 py-2">Bus <?= $list['id'] ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $registrations->getRegistrationsPerBus($list['id']) ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $registrations->availableSeats($list['id']) ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $list['capacity'] ?></td>
                     </tr>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2">Bus B</td>
-                        <td class="border border-gray-300 px-4 py-2">18</td>
-                        <td class="border border-gray-300 px-4 py-2">25</td>
-                    </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
 
-    </div>
     </div>
 </main>
 <script src="scripts/filterByBus.js"></script>

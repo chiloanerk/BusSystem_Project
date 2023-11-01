@@ -91,7 +91,7 @@ class ApplicationController
             $db = new Database();
 
             if (!isset($_SESSION['parent_id'], $_SESSION['name'], $_SESSION['surname'], $_SESSION['cellphone'],
-                $_SESSION['grade'], $_SESSION['bus'], $_SESSION['pickup_num'], $_SESSION['dropoff_num'])) {
+                $_SESSION['grade'], $_SESSION['bus'])) {
                 echo 'Missing Data';
             } else {
                 $learnerModel = new Learner($db);

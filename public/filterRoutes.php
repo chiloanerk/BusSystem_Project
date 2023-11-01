@@ -36,6 +36,7 @@ if (isset($_GET['bus_num'])) : ?>
             <?php foreach ($routes as $pickup) : ?>
             <option value="<?= $pickup['pickup_num'] ?>"><?= $pickup['pickup_name'] . ' @ ' . $pickup['pickup_time'] ?></option>
             <?php endforeach; ?>
+            <option value="">None</option>
         </select>
 
         <label for="dropoff_num">Dropoff Point</label>
@@ -44,6 +45,7 @@ if (isset($_GET['bus_num'])) : ?>
             <?php foreach ($routes as $dropoff) : ?>
                 <option value="<?= $dropoff['dropoff_num'] ?>"><?= $dropoff['dropoff_name'] . ' @ ' . $dropoff['dropoff_time'] ?></option>
             <?php endforeach; ?>
+            <option value="">None</option>
         </select>
     <div class=" flex justify-center">
         <table>

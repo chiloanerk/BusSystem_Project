@@ -1,5 +1,6 @@
 <?php
 
+// These are my routes, I specify the request, the URI path and then the controller directory and file
 global $router;
 $router->addRoute('GET', '/', 'home/home');
 
@@ -16,6 +17,7 @@ $router->addRoute('GET', '/review', 'application/review');
 $router->addRoute('POST', '/complete', 'application/complete');
 $router->addRoute('GET', '/checkout', 'application/checkout');
 $router->addRoute('GET', '/final', 'application/final');
+$router->addRoute('POST', '/final', 'application/final');
 
 $router->addRoute('GET', '/dashboard', 'admin/dashboard');
 $router->addRoute('GET', '/approve', 'admin/approve');

@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+
 use PDO;
 
 class Parents
@@ -27,6 +28,7 @@ class Parents
     {
         return $this->name;
     }
+
     public function setName($name)
     {
         $this->name = $name;
@@ -36,6 +38,7 @@ class Parents
     {
         return $this->surname;
     }
+
     public function setSurname($surname)
     {
         $this->surname = $surname;
@@ -45,6 +48,7 @@ class Parents
     {
         return $this->email;
     }
+
     public function setEmail($email)
     {
         $this->email = $email;
@@ -59,6 +63,7 @@ class Parents
     {
         return $this->cellphone;
     }
+
     public function setCellphone($cellphone)
     {
         $this->cellphone = $cellphone;
@@ -74,8 +79,13 @@ class Parents
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':cellphone', $this->cellphone);
-        $stmt->execute();
-        $this->id = $this->pdo->lastInsertId();
+
+        if ($stmt->execute()) {
+            $this->id = $this->pdo->lastInsertId();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getParentInfo($parent_id)

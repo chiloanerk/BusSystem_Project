@@ -5,12 +5,14 @@
                 <a href="/" class="bg-gray-900 text-white rounded-md px-3 py-2 mx-4 text-sm font-medium"
                    aria-current="page">Home</a>
             <?php endif; ?>
-            <?php if ($_SESSION['role'] == 'admin') : ?>
-            <a href="/dashboard"
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') : ?>
+                <a href="/dashboard"
                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 mx-4 text-sm font-medium">Dashboard</a>
             <?php endif; ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'parent') : ?>
             <a href="/application"
                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 mx-4 text-sm font-medium">Applications</a>
+            <?php endif; ?>
             <?php if (isset($_SESSION['role'])) : ?>
                 <a href="/logout"
                    class="text-gray-300 hover:bg-red-700 hover:text-white rounded-md px-3 py-2 mx-4 text-sm font-medium">Logout</a>
@@ -18,7 +20,6 @@
                 <a href="/login"
                    class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 mx-4 text-sm font-medium">Login</a>
             <?php endif; ?>
-            </a>
         </div>
     </div>
 </nav>

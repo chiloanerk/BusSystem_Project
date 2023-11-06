@@ -136,6 +136,17 @@ class BusRegistration
         return $stmt->fetchAll();
     }
 
+    public function getRegistrationCountPerParent($parent_id)
+    {
+        $sql = 'SELECT COUNT(registration_id) FROM registrations WHERE parent_id = :parent_id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':parent_id', $parent_id);
+        $stmt->execute();
+
+        $count = (int)$stmt->fetchColumn();
+        return $count;
+    }
+
     public function getRegistrationsByStatus($status)
     {
         $sql = "SELECT * FROM registrations WHERE status = :status";

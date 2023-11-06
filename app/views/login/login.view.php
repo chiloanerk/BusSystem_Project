@@ -5,9 +5,13 @@
     <main class="p-4 min-h-full">
         <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 text-center">
             <?php if (isset($_SESSION['error'])) : ?>
-                <p class="text-red-800"><?= $_SESSION['error'] ?></p>
+                <p class="text-red-800 my-2"><?= $_SESSION['error'] ?></p>
+                <?php unset($_SESSION['error']); ?>
             <?php endif ?>
-
+            <?php if (isset($_SESSION['message'])) : ?>
+                <p class="text-green-700 my-2"><?= $_SESSION['message'] ?></p>
+            <?php unset($_SESSION['message']); ?>
+            <?php endif ?>
 
             <form method="post" action="/login"
                   class="w-full max-w-md mx-auto p-6 bg-white rounded-md shadow-lg">
@@ -35,6 +39,7 @@
                            value="Login">
                 </div>
             </form>
+            <p class="text-gray-700 mt-4">Don't have an account? <a href="/signup" class="text-blue-500 hover:underline">Sign up here</a></p>
         </div>
     </main>
 

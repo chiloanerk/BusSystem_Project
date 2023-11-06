@@ -2,12 +2,15 @@
 
 namespace app\controllers\application;
 
+use app\classes\Emailer;
 use app\models\Bus;
 use app\models\BusRegistration;
 use app\models\BusRoutes;
 use app\models\Database;
 use app\models\Learner;
 use app\models\Parents;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Exception;
 
 class ApplicationController
@@ -39,7 +42,7 @@ class ApplicationController
 
             $name = $_POST['name'];
             $surname = $_POST['surname'];
-            $cellphone = $_POST['cellphone'];
+            $cellphone = intval($_POST['cellphone']);
             $grade = $_POST['grade'];
             $bus = $_POST['bus'];
             $pickup_num = $_POST['pickup_num'];
@@ -84,7 +87,6 @@ class ApplicationController
         session_start();
 
 
-
         if (isset($_POST['complete'])) {
 
 
@@ -100,7 +102,7 @@ class ApplicationController
                 $learnerModel->setParent_id($_SESSION['parent_id']);
                 $learnerModel->setName($_SESSION['name']);
                 $learnerModel->setSurname($_SESSION['surname']);
-                $learnerModel->setCellphone($_SESSION['cellphone']);
+                $learnerModel->setCellphone(intval($_SESSION['cellphone']));
                 $learnerModel->setGrade($_SESSION['grade']);
 
                 $learnerModel->save();
@@ -149,48 +151,85 @@ class ApplicationController
 
     }
 
-        public function checkout()
-        {
-            session_start();
+    public function checkout()
+    {
+        session_start();
 
-            $db = new Database();
-            $learnerModel = new Learner($db);
-            $busModel = new Bus($db);
-            $routeModel = new BusRoutes($db);
-            $parentModel = new Parents($db);
+        $db = new Database();
+        $learnerModel = new Learner($db);
+        $busModel = new Bus($db);
+        $routeModel = new BusRoutes($db);
+        $parentModel = new Parents($db);
 
-            $registrationModel = new BusRegistration($db);
-            $parent_id = $_SESSION['parent_id'];
-            $parentInfo = $parentModel->getParentInfo($parent_id);
-            $registrations = $registrationModel->getRegistrationByParentId($parent_id);
+        $registrationModel = new BusRegistration($db);
+        $parent_id = $_SESSION['parent_id'];
+        $parentInfo = $parentModel->getParentInfo($parent_id);
+        $registrations = $registrationModel->getRegistrationByParentId($parent_id);
+        $learnerCount = $registrationModel->getRegistrationCountPerParent($parent_id);
+        var_dump($learnerCount);
 
-            view('application/checkout', [
-                'title' => 'SafeTrans - Checkout',
-                'heading' => 'Registration Complete',
-                'db' => $db,
-                'learnerModel' => $learnerModel,
-                'busModel' => $busModel,
-                'routeModel' => $routeModel,
-                'parentInfo' => $parentInfo,
-                'registrations' => $registrations
-            ]);
-        }
-
-        public function final()
-        {
-            session_start();
-
-            $db = new Database();
-            $parentModel = new Parents($db);
-
-            $parentInfo = $parentModel->getParentInfo($_SESSION['parent_id']);
-            $parent_email = $parentInfo['email'];
-
-            view('application/final', [
-                'title' => 'SafeTrans - Complete',
-                'heading' => 'Registration Complete',
-                'parent_email' => $parent_email
-            ]);
-        }
-
+        view('application/checkout', [
+            'title' => 'SafeTrans - Checkout',
+            'heading' => 'Registration Complete',
+            'db' => $db,
+            'learnerModel' => $learnerModel,
+            'busModel' => $busModel,
+            'routeModel' => $routeModel,
+            'parentInfo' => $parentInfo,
+            'registrations' => $registrations,
+            'learnerCount' => $learnerCount
+        ]);
     }
+
+    public function final()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $_SESSION['error'] = 'Failed to sent email';
+            header('Location: /checkout');
+        }
+        if (isset($_POST['name'], $_POST['email'])) {
+            $name = $_POST['name'];
+            $email = $_POST['email'];
+
+            $subject = 'Learner Registration Confirmation';
+            $message = 'This email serves as confirmation for the bus registration in 2024.';
+
+            require base_path('/vendor/autoload.php');
+
+            $options = new Options();
+            $options->set('isHtmlParserEnabled', true);
+            $options->set('isPhpEnabled', true);
+            $dompdf = new Dompdf($options);
+
+            ob_start();
+            $this->checkout();
+            $htmlContent = ob_get_clean();
+
+            // Add a link to the current page within the PDF content
+            $htmlContent .= '<a href="/checkout"></a>';
+
+            $dompdf->loadHtml($htmlContent);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
+            $pdfContent = $dompdf->output();
+            $pdfFile = 'pdf/registration.pdf';
+            file_put_contents($pdfFile, $pdfContent);
+
+            $mailer = new Emailer();
+            if ($mailer->sendEmail($name, $email, $subject, $message, $pdfFile)) {
+                $db = new Database();
+                $parentModel = new Parents($db);
+
+                $parentInfo = $parentModel->getParentInfo($_SESSION['parent_id']);
+                $parent_email = $parentInfo['email'];
+
+                view('application/final', [
+                    'title' => 'SafeTrans - Complete',
+                    'heading' => 'Registration Complete',
+                    'parent_email' => $parent_email
+                ]);
+            }
+        }
+    }
+
+}

@@ -31,7 +31,7 @@ if (isset($_GET['bus_num'])) : ?>
     ?>
 
         <label for="pickup_num">Pickup Point</label>
-        <select name="pickup_num" id="pickup_num" class="border rounded px-4 mb-4 py-2 w-full" required>
+        <select name="pickup_num" id="pickup_num" class="border rounded bg-white px-4 mb-4 py-2 w-full" required>
             <option value="">Select a Pickup Point</option>
             <?php foreach ($routes as $pickup) : ?>
             <option value="<?= $pickup['pickup_num'] ?>"><?= $pickup['pickup_name'] . ' @ ' . $pickup['pickup_time'] ?></option>
@@ -40,7 +40,7 @@ if (isset($_GET['bus_num'])) : ?>
         </select>
 
         <label for="dropoff_num">Dropoff Point</label>
-        <select name="dropoff_num" id="dropoff_num" class="border rounded px-4 mb-8 py-2 w-full" required>
+        <select name="dropoff_num" id="dropoff_num" class="border rounded bg-white px-4 mb-8 py-2 w-full" required>
             <option value="">Select a Dropoff Point</option>
             <?php foreach ($routes as $dropoff) : ?>
                 <option value="<?= $dropoff['dropoff_num'] ?>"><?= $dropoff['dropoff_name'] . ' @ ' . $dropoff['dropoff_time'] ?></option>
@@ -52,7 +52,7 @@ if (isset($_GET['bus_num'])) : ?>
             <tr>
                 <th>Available Seats</th>
             </tr>
-            <tr>
+            <tr class="flex justify-center">
                 <td><?= $seats . ' / ' . $capacity['capacity']; ?></td>
             </tr>
         </table>

@@ -92,23 +92,40 @@ include base_path('/app/views/partials/head.php'); ?>
                 <a href="/application">
                     <button class="bg-blue-500 py-2 px-16 font-bold text-white">Add Learner</button>
                 </a>
-                <a href="/final">
-                    <button class="bg-green-500 py-2 px-16 font-bold text-white">Finalise</button>
-                </a>
+                <form action="/final" method="post">
+                    <input type="hidden" value="<?= $parentInfo['name'] . ' ' . $parentInfo['surname'] ?>" name="name">
+                    <input type="hidden" value="<?= $parentInfo['email'] ?>" name="email">
+                    <input type="hidden" value="<?= $registration['status'] ?>" name="status">
+                    <a href="/final">
+                        <button type="submit" class="bg-green-500 py-2 px-16 font-bold text-white">Finalise</button>
+                    </a>
+                </form>
 
             </div>
 
-            <h2 class="flex justify-center">Bank Information</h2>
+            <h2 class="flex justify-center">Payment Information</h2>
             <div class="w-full p-4">
                 <table class="table-fixed border-collapse w-full">
                     <tbody>
                     <tr>
+                        <td class="border px-4 py-2">Amount to Pay @ (R420 Per 20 trips):</td>
+                        <td class="border px-4 py-2 font-bold"><?= 'R' . $learnerCount * $busModel->getAmount(1) ?></td>
+                    </tr>
+                    <tr>
                         <td class="border px-4 py-2">Bank Name:</td>
-                        <td class="border px-4 py-2">Example Bank</td>
+                        <td class="border px-4 py-2">South Africa First Bank</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">Account Holder:</td>
+                        <td class="border px-4 py-2">Impumelelo High</td>
                     </tr>
                     <tr>
                         <td class="border px-4 py-2">Account Number:</td>
-                        <td class="border px-4 py-2">1234567890</td>
+                        <td class="border px-4 py-2">074223939</td>
+                    </tr>
+                    <tr>
+                        <td class="border px-4 py-2">Branch Code:</td>
+                        <td class="border px-4 py-2">00232</td>
                     </tr>
                     </tbody>
                 </table>

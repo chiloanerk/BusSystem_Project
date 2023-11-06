@@ -37,4 +37,15 @@ class Bus
         $stmt->execute();
         return $stmt->fetch();
     }
+
+    public function getAmount($bus_id)
+    {
+        $sql = 'SELECT ticket_price FROM bus WHERE id = :bus_id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':bus_id', $bus_id);
+        $stmt->execute();
+
+        $price = $stmt->fetchColumn();
+        return $price;
+    }
 }

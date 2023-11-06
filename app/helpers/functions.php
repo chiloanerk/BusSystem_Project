@@ -20,9 +20,4 @@ function view($viewPath, array $data = [])
         echo "View not found.";
         var_dump($viewFilePath);
     }
-
-    function addError($message)
-    {
-        $_SESSION['error'] = $message;
-    }
 }

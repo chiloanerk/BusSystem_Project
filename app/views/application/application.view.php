@@ -13,7 +13,7 @@
         </div>
         <form method="post" action="/review"
               class="w-full max-w-3xl mx-auto p-6 bg-white rounded-md shadow-lg">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="lg:grid grid-cols-2 gap-4">
                 <div>
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700">Child's Name:</label>
@@ -39,7 +39,7 @@
                 <div class="flex flex-col justify-center">
                     <div class="mb-4">
                         <label for="pickup_num">Bus</label>
-                        <select name="bus" id="pickup_num" class="border rounded px-4 py-2 w-full" required onchange="showRoutes(this.value)">
+                        <select name="bus" id="pickup_num" class="border rounded bg-white px-4 py-2 w-full" required onchange="showRoutes(this.value)">
                             <option value="">Select a Bus</option>
                             <?php foreach ($buses as $bus) : ?>
                             <option value="<?= $bus['id'] ?>">Bus <?= $bus['id'] . ' - ' . $bus['route'] ?></option>
@@ -49,12 +49,12 @@
 
                     <div class="mb-4" id="routeInfo">
                         <label for="pickup_num">Pickup Point</label>
-                        <select name="pickup_num" id="pickup_num" class="border rounded px-4 mb-4 py-2 w-full">
+                        <select name="pickup_num" id="pickup_num" class="border rounded bg-white px-4 mb-4 py-2 w-full">
                             <option value="">Select a Pickup Point</option>
                         </select>
 
                         <label for="dropoff_num">Dropoff Point</label>
-                        <select name="dropoff_num" id="dropoff_num" class="border rounded px-4 mb-8 py-2 w-full">
+                        <select name="dropoff_num" id="dropoff_num" class="border rounded bg-white px-4 mb-8 py-2 w-full">
                             <option value="">Select a Dropoff Point</option>
                         </select>
                         <div class=" flex justify-center">
@@ -62,8 +62,8 @@
                                 <tr>
                                     <th>Available Seats</th>
                                 </tr>
-                                <tr>
-                                    <td>Selct Bus</td>
+                                <tr class="flex justify-center">
+                                    <td>Select a Bus</td>
                                 </tr>
                             </table>
                         </div>

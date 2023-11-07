@@ -4,7 +4,7 @@
 
 <main class="p-4 min-h-full">
     <div class="mx-auto max-w-5xl py-2 bg-gray-50 sm:px-6 lg:px-8 text-center">
-        <p class="text-center text-red-800"><?= isset($_SESSION['error']) ?? '' ?></p>
+        <p class="text-center text-red-800"><?= isset($error) ?? '' ?></p>
         <table class="mx-auto bg-white table-auto w-3/4 border-collapse shadow-lg">
             <thead>
             <tr>

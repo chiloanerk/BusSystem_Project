@@ -77,7 +77,6 @@ class ApplicationController
                 'route' => $route['route'],
                 'pickup' => $pickup,
                 'dropoff' => $dropoff,
-                'error' => $_SERVER['error']
             ]);
         }
     }

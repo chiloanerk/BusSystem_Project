@@ -186,10 +186,10 @@ class BusRegistration
 
     public function getThisWeek()
     {
-        $sql = "SELECT * FROM registrations WHERE date >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK )";
+        $sql = "SELECT COUNT(registration_id) FROM registrations WHERE date >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK )";
         $stmt = $this->pdo->query($sql);
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchColumn();
     }
 
     public function getWeeklyMorningCount($bus_id)

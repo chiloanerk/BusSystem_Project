@@ -57,27 +57,28 @@ $registrations = new BusRegistration($db);
                     </tr>
                     </thead>
                     <tbody id="waiting_list">
-                    <?php foreach ($waitingList as $list) : ?>
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['name'] . ' ' . $learner->getLearner($list['learner_id'])['surname'] ?></td>
-                            <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['cellphone'] ?></td>
-                            <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['grade'] ?></td>
-                            <td class="border border-gray-300 px-4 py-2"><?= $list['pickup_num'] . ' - ' . $route->getPickup($list['pickup_num'])['pickup_name'] ?></td>
-                            <td class="border border-gray-300 px-4 py-2"><?= $list['dropoff_num'] . ' - ' . $route->getDropoff($list['dropoff_num'])['dropoff_name'] ?></td>
-                            <form action="/approve " method="get">
+                    <?php foreach ($waitingList
+
+                    as $list) : ?>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['name'] . ' ' . $learner->getLearner($list['learner_id'])['surname'] ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= '0' . $learner->getLearner($list['learner_id'])['cellphone'] ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['grade'] ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $list['pickup_num'] . ' - ' . $route->getPickup($list['pickup_num'])['pickup_name'] ?></td>
+                        <td class="border border-gray-300 px-4 py-2"><?= $list['dropoff_num'] . ' - ' . $route->getDropoff($list['dropoff_num'])['dropoff_name'] ?></td>
+                        <form action="/approve " method="get">
                             <input type="hidden" name="learner_id" value="<?= $list['learner_id'] ?>">
                             <td class="border border-gray-300 px-4 py-2">
                                 <button type="submit" class="text-blue-600 hover:underline">Approve</button>
                             </td>
-                            </form>
-                        </tr>
+                        </form>
+                    </tr>
                     </tbody>
                     <?php endforeach; ?>
                 </table>
             </div>
 
             <div class="mt-4">
-                <!-- Report 2: Learners Using Bus Transport for Today -->
                 <h3 class="text-lg font-medium">Learners Using Bus Transport Today</h3>
                 <table class="w-full border-collapse border border-gray-300 mt-2">
                     <thead>
@@ -89,10 +90,14 @@ $registrations = new BusRegistration($db);
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($approvedList as $list) : ?>
-                        <tr>
+                    <?php
+                    $rowCount = 0;
+                    foreach ($approvedList as $list) :
+                        $rowCount++;
+                        ?>
+                        <tr class="data-row">
                             <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['name'] . ' ' . $learner->getLearner($list['learner_id'])['surname'] ?></td>
-                            <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['cellphone'] ?></td>
+                            <td class="border border-gray-300 px-4 py-2"><?= '0' . $learner->getLearner($list['learner_id'])['cellphone'] ?></td>
                             <td class="border border-gray-300 px-4 py-2"><?= $learner->getLearner($list['learner_id'])['grade'] ?></td>
                             <td class="border border-gray-300 px-4 py-2">
                                 <?php
@@ -106,73 +111,94 @@ $registrations = new BusRegistration($db);
                                 ?>
                             </td>
                         </tr>
-
                     <?php endforeach; ?>
                     </tbody>
                 </table>
+                <?php
+                $maxRowsToShow = 5;
+                if ($rowCount > $maxRowsToShow) :
+                    ?>
+                    <button id="showMoreBtn" class="mt-2 p-2 bg-blue-500 cursor-pointer text-white">
+                        Show More
+                    </button>
+                <?php endif; ?>
             </div>
         </div>
+    </div>
 
-        <!-- Weekly MIS Reports -->
-        <div class="border p-4 rounded-lg shadow">
-            <h2 class="text-xl font-semibold">Weekly MIS Reports</h2>
-            <div class="mt-4">
-                <!-- Report 3: Total Learners Using Bus Transport This Week -->
-                <h3 class="text-lg font-medium">Total Learners Using Bus Transport This Week</h3>
-                <table class="w-full border-collapse border border-gray-300 mt-2">
-                    <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">Bus ID</th>
-                        <th class="border border-gray-300 px-4 py-2">Morning</th>
-                        <th class="border border-gray-300 px-4 py-2">Afternoon</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <?php $buses = $bus->getBuses() ?>
-                    <?php foreach ($buses as $list) : ?>
-                    <tr>
-                        <td class="border border-gray-300 px-4 py-2"><?= 'Bus ' . $list['id'] ?></td>
-                        <td class="border border-gray-300 px-4 py-2"><?= $registrations->getWeeklyMorningCount($list['id'])['morning_trip_count'] ?></td>
-                        <td class="border border-gray-300 px-4 py-2"><?= $registrations->getWeeklyAfternoonCount($list['id'])['afternoon_trip_count'] ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
+    <!-- Weekly MIS Reports -->
+    <div class="border p-4 rounded-lg mt-4 shadow">
+        <h2 class="text-xl font-semibold">Weekly MIS Reports</h2>
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="border p-4 rounded-lg shadow col-span-2">
+                <div class="mt-4">
+                    <!-- Total Learners Using Bus Transport This Week -->
+                    <h3 class="text-lg font-medium">Total Learners Using Bus Transport This Week</h3>
+                    <table class="w-full border-collapse border border-gray-300 mt-2">
+                        <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">Bus ID</th>
+                            <th class="border border-gray-300 px-4 py-2">Morning</th>
+                            <th class="border border-gray-300 px-4 py-2">Afternoon</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php $buses = $bus->getBuses() ?>
+                        <?php foreach ($buses as $list) : ?>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2"><?= 'Bus ' . $list['id'] ?></td>
+                                <td class="border border-gray-300 px-4 py-2"><?= $registrations->getWeeklyMorningCount($list['id'])['morning_trip_count'] ?></td>
+                                <td class="border border-gray-300 px-4 py-2"><?= $registrations->getWeeklyAfternoonCount($list['id'])['afternoon_trip_count'] ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- Additional Reports -->
-        <div class="border p-4 rounded-lg mt-4 shadow">
-            <h2 class="text-xl font-semibold">Additional Reports</h2>
-            <div class="mt-4">
-                <!-- Report 4: Bus Occupancy Report -->
-                <h3 class="text-lg font-medium">Bus Occupancy Report</h3>
-                <table class="w-full border-collapse border border-gray-300 mt-2">
-                    <thead>
-                    <tr class="bg-gray-100">
-                        <th class="border border-gray-300 px-4 py-2">Bus ID</th>
-                        <th class="border border-gray-300 px-4 py-2">Seats Taken</th>
-                        <th class="border border-gray-300 px-4 py-2">Seats Left</th>
-                        <th class="border border-gray-300 px-4 py-2">Capacity</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($buses as $list) : ?>
+            <!-- Total Registrations for This Week -->
+            <div class="border p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold">Total Registrations for This Week</h2>
+                <div class="flex flex-col justify-center h-full"> <!-- Add this div with flex properties -->
+                    <p class="text-xl font-bold text-center my-auto"><?= $registrations->getThisWeek() ?></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Additional Reports -->
+    <div class="border p-4 rounded-lg mt-4 shadow">
+        <h2 class="text-xl font-semibold">Additional Reports</h2>
+        <div class="mt-4">
+            <!-- Report 4: Bus Occupancy Report -->
+            <h3 class="text-lg font-medium">Bus Occupancy Report</h3>
+            <table class="w-full border-collapse border border-gray-300 mt-2">
+                <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">Bus ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Seats Taken</th>
+                    <th class="border border-gray-300 px-4 py-2">Seats Left</th>
+                    <th class="border border-gray-300 px-4 py-2">Capacity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($buses as $list) : ?>
                     <tr>
                         <td class="border border-gray-300 px-4 py-2">Bus <?= $list['id'] ?></td>
                         <td class="border border-gray-300 px-4 py-2"><?= $registrations->getRegistrationsPerBus($list['id']) ?></td>
                         <td class="border border-gray-300 px-4 py-2"><?= $registrations->availableSeats($list['id']) ?></td>
                         <td class="border border-gray-300 px-4 py-2"><?= $list['capacity'] ?></td>
                     </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
+    </div>
 
     </div>
 </main>
 <script src="scripts/filterByBus.js"></script>
+<script src="scripts/showMore.js"></script>
 
 <?php include base_path('/app/views/partials/footer.php'); ?>

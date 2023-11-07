@@ -51,5 +51,6 @@ class AdminController
     {
         $db = new Database();
         $registrations = new BusRegistration($db);
+        $registrations->getThisWeek();
     }
 }

@@ -32,7 +32,7 @@
 
                     <div class="mb-4">
                         <label for="grade">Grade</label>
-                        <input type="number" id="grade" name="grade" value="<?= $_SESSION['grade'] ?? '' ?>" required class="border rounded px-4 py-2 w-full">
+                        <input type="number" min="8" max="12" id="grade" name="grade" value="<?= $_SESSION['grade'] ?? '' ?>" required class="border rounded px-4 py-2 w-full">
                     </div>
                 </div>
 

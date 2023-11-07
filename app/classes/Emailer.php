@@ -10,7 +10,7 @@ require base_path('/vendor/autoload.php');
 
 class Emailer
 {
-    public function sendEmail($recipientName, $recipientEmail, $subject, $message, $pdfFile)
+    public function sendEmail($recipientName, $recipientEmail, $subject, $message, $pdfFile = null)
     {
         $mail = new PHPMailer(true);
 
@@ -34,7 +34,9 @@ class Emailer
             $mail->Body = $message;
 
             // Attachment
-            $mail->addAttachment($pdfFile, 'registration.pdf');
+            if ($pdfFile !== null) {
+                $mail->addAttachment($pdfFile, 'registration.pdf');
+            }
 
             if ($mail->send()) {
                 return true;

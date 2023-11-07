@@ -18,6 +18,5 @@ function view($viewPath, array $data = [])
         require $viewFilePath;
     } else {
         echo "View not found.";
-        var_dump($viewFilePath);
     }
 }

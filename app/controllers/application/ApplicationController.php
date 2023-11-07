@@ -165,7 +165,6 @@ class ApplicationController
         $parentInfo = $parentModel->getParentInfo($parent_id);
         $registrations = $registrationModel->getRegistrationByParentId($parent_id);
         $learnerCount = $registrationModel->getRegistrationCountPerParent($parent_id);
-        var_dump($learnerCount);
 
         view('application/checkout', [
             'title' => 'SafeTrans - Checkout',

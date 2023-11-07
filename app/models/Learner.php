@@ -76,6 +76,15 @@ class Learner
         $this->grade = $grade;
     }
 
+    public function getParent($learner_id)
+    {
+        $sql = 'SELECT parent.name, parent.surname, parent.email FROM learner Join parent ON learner.parent_id = parent.id WHERE learner.id = :learner_id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':learner_id', $learner_id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public function save()
     {
         $sql = 'INSERT INTO learner (name, surname, cellphone, grade, parent_id) VALUES (:name, :surname, :cellphone, :grade, :parent_id)';

@@ -24,7 +24,7 @@
             </tr>
             <tr>
                 <td class="border-b px-4 py-2">Cellphone</td>
-                <td class="border-b px-4 py-2"><?= $cellphone ?></td>
+                <td class="border-b px-4 py-2"><?= '0' . $cellphone ?></td>
             </tr>
             <tr>
                 <td class="border-b px-4 py-2">Grade</td>

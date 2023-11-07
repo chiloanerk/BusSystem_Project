@@ -25,7 +25,6 @@ class Router
                     require_once $controllerPath;
                 } else {
                     echo "Controller not found.";
-                    var_dump($controllerPath);
                 }
                 return;
             }
